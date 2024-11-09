@@ -30,10 +30,10 @@ contract Voting {
     event StopVoting(address stoppedBy);
     event AddCandidate(address candidate);
 
-    constructor(uint _startingTime, uint _endTime) {
+    constructor(uint _startingTime, uint _endingTime) {
         owner = msg.sender;
         startingTime = _startingTime;
-        endingTime = _endTime;
+        endingTime = _endingTime;
     }
 
     modifier onlyOwner(){ 

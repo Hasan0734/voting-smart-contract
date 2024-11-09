@@ -14,7 +14,7 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "_endTime",
+						"name": "_endingTime",
 						"type": "uint256"
 					}
 				],
@@ -331,11 +331,11 @@
 	},
 	"sources": {
 		"voting.sol": {
-			"keccak256": "0x48547c32038c54e56ce8693dd6ade51be8031c417312bfe8036778b853b43b78",
+			"keccak256": "0x885428f28bea2bc9c8154975826dda003b6a1a6ffcff808d883573f8e1a37927",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://465258a18d9b3f83c22f80b112447cbb308c18d34c7ae753b732a4ee44f90e76",
-				"dweb:/ipfs/QmSyZ3p6kaCKMGSpoXKzSEGfKV85oVy1M2A99hFCp2Fo2Z"
+				"bzz-raw://92414ca8214455df5e856fb9324b0077bc145ab072cf5c67c3cc7679203991db",
+				"dweb:/ipfs/QmT1yE3rgHdcddZchnAGXzCvNExfcWdikmZtS7biAVDYGC"
 			]
 		}
 	},
