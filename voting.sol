@@ -7,28 +7,26 @@ contract Voting {
     uint public endingTime;
     bool public isVoting;
     address public owner;
-    address[] public  candidates;
+    address[] public candidates;
+    mapping(address => bool) private candidateExists;
 
-    struct Vote{
+    struct Vote {
         address receiver;
         uint256 timestamp;
     }
 
-    struct CandidateVote{
+    struct CandidateVote {
         address candidate;
         uint256 votesCount; 
     } 
     
-    mapping (address => Vote) public votes;
-    mapping (address => uint) public  candidatesVotes;
+    mapping(address => Vote) public votes;
+    mapping(address => uint) public candidatesVotes;
 
-    // defineing events
-
-    event AddVote(address indexed voter, address receiver, uint256 timestamp);
-    event RemoveVote(address voter);
-    event StartVoting(address startBy);
-    event StopVoting(address stoppedBy);
-    event AddCandidate(address candidate);
+    event VoteCast(address indexed voter, address receiver, uint256 timestamp);
+    event VoteRemoved(address voter);
+    event VotingStatusChanged(bool isVoting, address triggeredBy);
+    event CandidateAdded(address candidate);
 
     constructor(uint _startingTime, uint _endingTime) {
         owner = msg.sender;
@@ -36,81 +34,79 @@ contract Voting {
         endingTime = _endingTime;
     }
 
-    modifier onlyOwner(){ 
-        require(msg.sender == owner, "not owner");
+    modifier onlyOwner() { 
+        require(msg.sender == owner, "Only the owner can call this function");
         _;
     }
 
-    function isInCandidates(address _candidate) private view  returns(bool){
-
-        for (uint i = 0; i < candidates.length; i++)   {
-            
-            if(candidates[i] == _candidate) {
-                return true;
-            }
-        }
-        return  false;
+    modifier votingActive() {
+        require(isVoting, "Voting is not active");
+        _;
     }
 
-    function addCandidate(address _candidate) external onlyOwner{
-        require(msg.sender != _candidate, "You cant be candidate!");
-        require(!isVoting, "Already voting started, cant add new candiate");
-        require(!isInCandidates(_candidate) , "Already exists");
-     
+    modifier withinVotingPeriod() {
+        require(block.timestamp >= startingTime, "Voting has not started yet");
+        require(block.timestamp <= endingTime, "Voting has ended");
+        _;
+    }
+
+    function addCandidate(address _candidate) external onlyOwner {
+        require(_candidate != msg.sender, "Owner cannot be a candidate");
+        require(!isVoting, "Cannot add candidates after voting has started");
+        require(!candidateExists[_candidate], "Candidate already exists");
+
         candidates.push(_candidate);
-        emit AddCandidate(_candidate);
+        candidateExists[_candidate] = true;
+        emit CandidateAdded(_candidate);
     }
 
-    function startAndStopVoting() external onlyOwner{
-        if(!isVoting) {
-            require(block.timestamp >= startingTime, "Voting time is comming!");
+    function toggleVoting() external onlyOwner {
+        if (!isVoting) {
+            require(block.timestamp >= startingTime, "Too early to start voting");
             isVoting = true;
-            emit StartVoting(msg.sender);
-        }else  {
-            require(block.timestamp >= endingTime, "Voting time is not ended!");
+        } else {
+            require(block.timestamp >= endingTime, "Too early to end voting");
             isVoting = false;
-            emit StopVoting(msg.sender); 
         }
+        emit VotingStatusChanged(isVoting, msg.sender);
     }
 
-    function castVote(uint _receiver) external{
-        require(isVoting, "Vote not started");
-        require(block.timestamp <= endingTime, "Voting time is ended!");
-        require(_receiver < candidates.length && _receiver >= 0, "Candidate not found!");
+    function castVote(uint _candidateIndex) external votingActive withinVotingPeriod {
+        require(_candidateIndex < candidates.length, "Candidate not found");
 
         Vote storage vote = votes[msg.sender];
-        require(vote.receiver == address(0), "Already, casted your vote!");
-        
-        vote.receiver = candidates[_receiver];
+        require(vote.receiver == address(0), "Vote already cast");
+
+        address candidateAddress = candidates[_candidateIndex];
+        vote.receiver = candidateAddress;
         vote.timestamp = block.timestamp;
-        candidatesVotes[candidates[_receiver]] += 1;
-        emit AddVote(msg.sender, vote.receiver, vote.timestamp);
+        candidatesVotes[candidateAddress] += 1;
+
+        emit VoteCast(msg.sender, candidateAddress, vote.timestamp);
     }
 
-    function removeVote(address _voter) external onlyOwner {
+    function removeVote(address _voter) external onlyOwner votingActive withinVotingPeriod {
         Vote storage vote = votes[_voter];
-        require(vote.receiver != address(0), "Not vote available");
-        
+        require(vote.receiver != address(0), "No vote to remove");
+
+        candidatesVotes[vote.receiver] -= 1;
         delete votes[_voter];
-        emit  RemoveVote(_voter);
+
+        emit VoteRemoved(_voter);
     }
 
-    function findCandidate (uint _index) external view returns (address){
+    function getCandidate(uint _index) external view returns (address) {
         return candidates[_index];
     }
 
-    function getCandidatesVote() public view returns( CandidateVote[] memory) {
+    function getCandidatesVotes() public view returns (CandidateVote[] memory) {
+        CandidateVote[] memory totalVotes = new CandidateVote[](candidates.length);
 
-        CandidateVote[] memory totalCastedVote = new CandidateVote[](candidates.length);
-        
-        for (uint i=0; i < candidates.length;i++){
-            totalCastedVote[i].candidate  =   candidates[i];
-            totalCastedVote[i].votesCount = candidatesVotes[candidates[i]];
+        for (uint i = 0; i < candidates.length; i++) {
+            address candidate = candidates[i];
+            totalVotes[i] = CandidateVote(candidate, candidatesVotes[candidate]);
         }
 
-        return totalCastedVote;
-
+        return totalVotes;
     }
-
-
 }

@@ -31,7 +31,7 @@
 						"type": "address"
 					}
 				],
-				"name": "AddCandidate",
+				"name": "CandidateAdded",
 				"type": "event"
 			},
 			{
@@ -56,7 +56,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "AddVote",
+				"name": "VoteCast",
 				"type": "event"
 			},
 			{
@@ -69,7 +69,7 @@
 						"type": "address"
 					}
 				],
-				"name": "RemoveVote",
+				"name": "VoteRemoved",
 				"type": "event"
 			},
 			{
@@ -77,25 +77,18 @@
 				"inputs": [
 					{
 						"indexed": false,
-						"internalType": "address",
-						"name": "startBy",
-						"type": "address"
-					}
-				],
-				"name": "StartVoting",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
+						"internalType": "bool",
+						"name": "isVoting",
+						"type": "bool"
+					},
 					{
 						"indexed": false,
 						"internalType": "address",
-						"name": "stoppedBy",
+						"name": "triggeredBy",
 						"type": "address"
 					}
 				],
-				"name": "StopVoting",
+				"name": "VotingStatusChanged",
 				"type": "event"
 			},
 			{
@@ -153,7 +146,7 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_receiver",
+						"name": "_candidateIndex",
 						"type": "uint256"
 					}
 				],
@@ -183,7 +176,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "findCandidate",
+				"name": "getCandidate",
 				"outputs": [
 					{
 						"internalType": "address",
@@ -196,7 +189,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "getCandidatesVote",
+				"name": "getCandidatesVotes",
 				"outputs": [
 					{
 						"components": [
@@ -260,13 +253,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "startAndStopVoting",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "startingTime",
 				"outputs": [
 					{
@@ -276,6 +262,13 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "toggleVoting",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -331,11 +324,11 @@
 	},
 	"sources": {
 		"voting.sol": {
-			"keccak256": "0x885428f28bea2bc9c8154975826dda003b6a1a6ffcff808d883573f8e1a37927",
+			"keccak256": "0xd3fb0910fc4d450a99f69b1ad8343e253adeae4dfcb0a0b4b8af49daf7768255",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://92414ca8214455df5e856fb9324b0077bc145ab072cf5c67c3cc7679203991db",
-				"dweb:/ipfs/QmT1yE3rgHdcddZchnAGXzCvNExfcWdikmZtS7biAVDYGC"
+				"bzz-raw://9ade9673915d624b3bd7a76c856bde2786c2e38bb19f6493d844c358a16a4ad2",
+				"dweb:/ipfs/Qmf5Ujdtg6yReTPnBRW4gKUeRz2zHLpkWsn2JBum7x4uDH"
 			]
 		}
 	},
