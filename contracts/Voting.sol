@@ -28,14 +28,17 @@ contract Voting {
     event VotingStatusChanged(bool isVoting, address triggeredBy);
     event CandidateAdded(address candidate);
 
-    constructor(uint _startingTime, uint _endingTime) {
+    constructor() {
         owner = msg.sender;
-        startingTime = _startingTime;
-        endingTime = _endingTime;
     }
 
     modifier onlyOwner() { 
         require(msg.sender == owner, "Only the owner can call this function");
+        _;
+    }
+    modifier votingDate () {
+        require(startingTime > 0 , "Starting time is required!");
+        require(endingTime > 0 , "Ending time is required!");
         _;
     }
 
@@ -50,6 +53,11 @@ contract Voting {
         _;
     }
 
+    function setDate(uint _startingTime, uint _endingTime) external  onlyOwner{
+        startingTime = _startingTime;
+        endingTime = _endingTime;
+    }
+
     function addCandidate(address _candidate) external onlyOwner {
         require(_candidate != msg.sender, "Owner cannot be a candidate");
         require(!isVoting, "Cannot add candidates after voting has started");
@@ -60,7 +68,7 @@ contract Voting {
         emit CandidateAdded(_candidate);
     }
 
-    function toggleVoting() external onlyOwner {
+    function toggleVoting() external onlyOwner votingDate {
         if (!isVoting) {
             require(block.timestamp >= startingTime, "Too early to start voting");
             isVoting = true;
@@ -71,7 +79,7 @@ contract Voting {
         emit VotingStatusChanged(isVoting, msg.sender);
     }
 
-    function castVote(uint _candidateIndex) external votingActive withinVotingPeriod {
+    function castVote(uint _candidateIndex) external votingActive withinVotingPeriod  {
         require(_candidateIndex < candidates.length, "Candidate not found");
 
         Vote storage vote = votes[msg.sender];
@@ -85,7 +93,7 @@ contract Voting {
         emit VoteCast(msg.sender, candidateAddress, vote.timestamp);
     }
 
-    function removeVote(address _voter) external onlyOwner votingActive withinVotingPeriod {
+    function removeVote(address _voter) external onlyOwner votingActive withinVotingPeriod  {
         Vote storage vote = votes[_voter];
         require(vote.receiver != address(0), "No vote to remove");
 
@@ -93,10 +101,6 @@ contract Voting {
         delete votes[_voter];
 
         emit VoteRemoved(_voter);
-    }
-
-    function getCandidate(uint _index) external view returns (address) {
-        return candidates[_index];
     }
 
     function getCandidatesVotes() public view returns (CandidateVote[] memory) {
@@ -109,4 +113,26 @@ contract Voting {
 
         return totalVotes;
     }
+
+    function getWinner() public view returns (uint) {
+        uint largest = 0;
+        bool isDraw;
+
+        for (uint i; i < candidates.length; i++)   {
+            if(candidatesVotes[candidates[i]] > largest) {
+              largest =  candidatesVotes[candidates[i]];
+              isDraw = false;
+            }else if(candidatesVotes[candidates[i]] == largest && candidatesVotes[candidates[i]] != 1){
+                  isDraw = true; 
+            }
+            
+        }
+     if (!isDraw)
+      return largest;
+    
+    // If there's a draw, you can either throw an error or handle it in some other way
+    revert("It's a Draw!");
+
+    }
+
 }
