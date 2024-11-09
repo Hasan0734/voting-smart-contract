@@ -3,7 +3,7 @@ pragma solidity ^0.8.7;
 
 contract Voting {
 
-    uint public startTime;
+    uint public startingTime;
     uint public endingTime;
     bool public isVoting;
     address public owner;
@@ -30,9 +30,9 @@ contract Voting {
     event StopVoting(address stoppedBy);
     event AddCandidate(address candidate);
 
-    constructor(uint _startTime, uint _endTime) {
+    constructor(uint _startingTime, uint _endTime) {
         owner = msg.sender;
-        startTime = _startTime;
+        startingTime = _startingTime;
         endingTime = _endTime;
     }
 
@@ -63,7 +63,7 @@ contract Voting {
 
     function startAndStopVoting() external onlyOwner{
         if(!isVoting) {
-            require(block.timestamp >= startTime, "Voting time is comming!");
+            require(block.timestamp >= startingTime, "Voting time is comming!");
             isVoting = true;
             emit StartVoting(msg.sender);
         }else  {

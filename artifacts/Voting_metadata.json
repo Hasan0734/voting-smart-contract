@@ -9,7 +9,7 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_startTime",
+						"name": "_startingTime",
 						"type": "uint256"
 					},
 					{
@@ -267,7 +267,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "startTime",
+				"name": "startingTime",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -331,11 +331,11 @@
 	},
 	"sources": {
 		"voting.sol": {
-			"keccak256": "0x2260dc110f26e8900b7650ae4923dcda8deb03396b32140f44d0b6523e73ad5d",
+			"keccak256": "0x48547c32038c54e56ce8693dd6ade51be8031c417312bfe8036778b853b43b78",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c743421400c27e79e346d628385ca4237115df6b29a0d9055c6bec25de471c96",
-				"dweb:/ipfs/Qme7S1ywJ9Eu1ieX872isr6Z71sk7mFvtXFSVvFbnQ1z94"
+				"bzz-raw://465258a18d9b3f83c22f80b112447cbb308c18d34c7ae753b732a4ee44f90e76",
+				"dweb:/ipfs/QmSyZ3p6kaCKMGSpoXKzSEGfKV85oVy1M2A99hFCp2Fo2Z"
 			]
 		}
 	},
