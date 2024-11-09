@@ -1,38 +1,45 @@
 # Voting Smart Contract
 
-This smart contract implements a decentralized voting system on the Ethereum blockchain. The contract allows the contract owner to add candidates, manage the voting period, and view the results. Participants can vote only once for a candidate of their choice, and the votes are counted securely.
+This Solidity smart contract implements a simple decentralized voting system where an owner can add candidates, manage voting periods, and users can vote for candidates. It securely counts votes, prevents duplicate voting, and provides a transparent view of the results.
+
+## Features
+
+- **Owner Management**: Only the owner can add candidates and control voting periods.
+- **Voting Period Control**: The owner can start or stop the voting within a specified period.
+- **Vote Casting**: Each user can vote for a candidate only once.
+- **Result Transparency**: Vote counts for each candidate are publicly viewable.
 
 ## Contract Details
 
 ### Key Variables
 
-- **startingTime**: The timestamp for when the voting period starts.
-- **endingTime**: The timestamp for when the voting period ends.
-- **isVoting**: A boolean value that shows if voting is currently active.
-- **owner**: The address of the contract owner (the only one authorized to manage candidates and toggle voting).
-- **candidates**: An array holding addresses of all candidates.
-- **candidateExists**: A private mapping that checks if a candidate already exists.
+- **`startingTime`** (`uint`): The start timestamp for the voting period.
+- **`endingTime`** (`uint`): The end timestamp for the voting period.
+- **`isVoting`** (`bool`): Indicates if voting is currently active.
+- **`owner`** (`address`): The address of the contract owner.
+- **`candidates`** (`address[]`): Array storing candidate addresses.
+- **`candidateExists`** (`mapping(address => bool)`): Mapping to check if a candidate already exists.
 
 ### Structs
 
-- **Vote**: Tracks each voter's selected candidate and the time of their vote.
-  - `receiver`: Address of the candidate receiving the vote.
-  - `timestamp`: The time when the vote was cast.
+- **Vote**: Tracks the details of each voter’s vote.
+  - `receiver` (`address`): Candidate receiving the vote.
+  - `timestamp` (`uint256`): Timestamp when the vote was cast.
 
-- **CandidateVote**: Represents a candidate's address and total votes.
-  - `candidate`: Address of the candidate.
-  - `votesCount`: The total number of votes received by the candidate.
+- **CandidateVote**: Contains candidate address and their vote count.
+  - `candidate` (`address`): Address of the candidate.
+  - `votesCount` (`uint256`): Total number of votes received by the candidate.
 
 ### Mappings
 
-- **votes**: Maps a voter's address to their vote details (if they've voted).
-- **candidatesVotes**: Maps each candidate's address to their vote count.
+- **votes** (`mapping(address => Vote)`): Maps a voter's address to their vote details.
+- **candidatesVotes** (`mapping(address => uint)`): Maps each candidate's address to their total votes.
 
 ### Events
 
-- **VoteCast**: Emitted when a vote is cast, includes the voter's address, candidate's address, and timestamp.
+- **VoteCast**: Emitted when a vote is cast.
 - **VoteRemoved**: Emitted when a vote is removed by the owner.
-- **VotingStatusChanged**: Emitted when the voting status changes, indicating if voting started or stopped.
+- **VotingStatusChanged**: Emitted when voting status is toggled.
 - **CandidateAdded**: Emitted when a new candidate is added by the owner.
 
 ## Functions
