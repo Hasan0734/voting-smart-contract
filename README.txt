@@ -1,28 +1,43 @@
-REMIX DEFAULT WORKSPACE
+# Voting Smart Contract
 
-Remix default workspace is present when:
-i. Remix loads for the very first time 
-ii. A new workspace is created with 'Default' template
-iii. There are no files existing in the File Explorer
+This smart contract implements a decentralized voting system on the Ethereum blockchain. The contract allows the contract owner to add candidates, manage the voting period, and view the results. Participants can vote only once for a candidate of their choice, and the votes are counted securely.
 
-This workspace contains 3 directories:
+## Contract Details
 
-1. 'contracts': Holds three contracts with increasing levels of complexity.
-2. 'scripts': Contains four typescript files to deploy a contract. It is explained below.
-3. 'tests': Contains one Solidity test file for 'Ballot' contract & one JS test file for 'Storage' contract.
+### Key Variables
 
-SCRIPTS
+- **startingTime**: The timestamp for when the voting period starts.
+- **endingTime**: The timestamp for when the voting period ends.
+- **isVoting**: A boolean value that shows if voting is currently active.
+- **owner**: The address of the contract owner (the only one authorized to manage candidates and toggle voting).
+- **candidates**: An array holding addresses of all candidates.
+- **candidateExists**: A private mapping that checks if a candidate already exists.
 
-The 'scripts' folder has four typescript files which help to deploy the 'Storage' contract using 'web3.js' and 'ethers.js' libraries.
+### Structs
 
-For the deployment of any other contract, just update the contract's name from 'Storage' to the desired contract and provide constructor arguments accordingly 
-in the file `deploy_with_ethers.ts` or  `deploy_with_web3.ts`
+- **Vote**: Tracks each voter's selected candidate and the time of their vote.
+  - `receiver`: Address of the candidate receiving the vote.
+  - `timestamp`: The time when the vote was cast.
 
-In the 'tests' folder there is a script containing Mocha-Chai unit tests for 'Storage' contract.
+- **CandidateVote**: Represents a candidate's address and total votes.
+  - `candidate`: Address of the candidate.
+  - `votesCount`: The total number of votes received by the candidate.
 
-To run a script, right click on file name in the file explorer and click 'Run'. Remember, Solidity file must already be compiled.
-Output from script will appear in remix terminal.
+### Mappings
 
-Please note, require/import is supported in a limited manner for Remix supported modules.
-For now, modules supported by Remix are ethers, web3, swarmgw, chai, multihashes, remix and hardhat only for hardhat.ethers object/plugin.
-For unsupported modules, an error like this will be thrown: '<module_name> module require is not supported by Remix IDE' will be shown.
+- **votes**: Maps a voter's address to their vote details (if they've voted).
+- **candidatesVotes**: Maps each candidate's address to their vote count.
+
+### Events
+
+- **VoteCast**: Emitted when a vote is cast, includes the voter's address, candidate's address, and timestamp.
+- **VoteRemoved**: Emitted when a vote is removed by the owner.
+- **VotingStatusChanged**: Emitted when the voting status changes, indicating if voting started or stopped.
+- **CandidateAdded**: Emitted when a new candidate is added by the owner.
+
+## Functions
+
+### Constructor
+
+```solidity
+constructor(uint _startingTime, uint _endingTime)
