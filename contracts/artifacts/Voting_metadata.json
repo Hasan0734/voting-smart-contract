@@ -84,8 +84,31 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "_candidate",
+						"name": "_address",
 						"type": "address"
+					}
+				],
+				"name": "activateCandidate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_candidateAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "_name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_profession",
+						"type": "string"
 					}
 				],
 				"name": "addCandidate",
@@ -96,17 +119,79 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
+						"internalType": "address",
+						"name": "_address",
+						"type": "address"
+					}
+				],
+				"name": "blockCandidate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
 						"name": "",
-						"type": "uint256"
+						"type": "address"
 					}
 				],
 				"name": "candidates",
 				"outputs": [
 					{
 						"internalType": "address",
-						"name": "",
+						"name": "_address",
 						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "profession",
+						"type": "string"
+					},
+					{
+						"internalType": "enum Voting.CandidateStatus",
+						"name": "status",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "candidatesData",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "_address",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "profession",
+						"type": "string"
+					},
+					{
+						"internalType": "enum Voting.CandidateStatus",
+						"name": "status",
+						"type": "uint8"
 					}
 				],
 				"stateMutability": "view",
@@ -134,9 +219,9 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
-						"name": "_candidateIndex",
-						"type": "uint256"
+						"internalType": "address",
+						"name": "_address",
+						"type": "address"
 					}
 				],
 				"name": "castVote",
@@ -165,31 +250,45 @@
 						"components": [
 							{
 								"internalType": "address",
-								"name": "candidate",
+								"name": "_address",
 								"type": "address"
 							},
 							{
 								"internalType": "uint256",
 								"name": "votesCount",
 								"type": "uint256"
+							},
+							{
+								"components": [
+									{
+										"internalType": "address",
+										"name": "_address",
+										"type": "address"
+									},
+									{
+										"internalType": "string",
+										"name": "name",
+										"type": "string"
+									},
+									{
+										"internalType": "string",
+										"name": "profession",
+										"type": "string"
+									},
+									{
+										"internalType": "enum Voting.CandidateStatus",
+										"name": "status",
+										"type": "uint8"
+									}
+								],
+								"internalType": "struct Voting.Candidate",
+								"name": "profile",
+								"type": "tuple"
 							}
 						],
 						"internalType": "struct Voting.CandidateVote[]",
 						"name": "",
 						"type": "tuple[]"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "getWinner",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -219,6 +318,19 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_address",
+						"type": "address"
+					}
+				],
+				"name": "pendingCandidate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -276,6 +388,29 @@
 				"inputs": [
 					{
 						"internalType": "address",
+						"name": "_candidateAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "_name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_profession",
+						"type": "string"
+					}
+				],
+				"name": "updateCandidate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
 						"name": "",
 						"type": "address"
 					}
@@ -325,11 +460,11 @@
 	},
 	"sources": {
 		"contracts/Voting.sol": {
-			"keccak256": "0x380829fde4e0a3ab5e08239a798c1d8a6a0a9f6d6942352bd7bb7cd22a2212ea",
+			"keccak256": "0x331444f61bed232ec08c8897196d803a2e7cb2911318d6a17d5fad78c4b5a27d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b446df747b4166a52e7f878f8cabd346cd053937f30f17d55930b3808b6ff8d0",
-				"dweb:/ipfs/QmTg8RUZLoVR6oDS1j1KknKK7nX1Mrw6zUVkgyY5sN2raQ"
+				"bzz-raw://5de92e233eb32072b0daa73bad3a8cd2f3596620541328c14de4e786cf862d49",
+				"dweb:/ipfs/QmckdTPYePchLdw14uvGKPcw5k77RWkJNvrdWZvHMQyNdY"
 			]
 		}
 	},
